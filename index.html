@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculator</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="calculator">
+                <div class="display" id="outputScreen">0</div>
+
+                <div>
+                    <button class="button" onclick="clearScreen()">AC</button>
+                    <button class="button" onclick="deleteChar()">DEL</button>
+                    <button class="button" onclick="appendOperator('%')">%</button>
+                    <button class="button" onclick="appendOperator('/')">/</button>
+                </div>
+                <div>
+                    <button class="button" onclick="appendNumber('7')">7</button>
+                    <button class="button" onclick="appendNumber('8')">8</button>
+                    <button class="button" onclick="appendNumber('9')">9</button>
+                    <button class="button" onclick="appendOperator('*')">*</button>
+                </div>
+                <div>
+                    <button class="button" onclick="appendNumber('4')">4</button>
+                    <button class="button" onclick="appendNumber('5')">5</button>
+                    <button class="button" onclick="appendNumber('6')">6</button>
+                    <button class="button" onclick="appendOperator('-')">-</button>
+                </div>
+                <div>
+                    <button class="button" onclick="appendNumber('1')">1</button>
+                    <button class="button" onclick="appendNumber('2')">2</button>
+                    <button class="button" onclick="appendNumber('3')">3</button>
+                    <button class="button" onclick="appendOperator('+')">+</button>
+                </div>
+                <div>
+                    <button class="button" onclick="appendNumber('0')">0</button>
+                    <button class="button" onclick="appendDecimal('.')">.</button>
+                    <button class="button equal" onclick="calculate()">=</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let output = document.getElementById('outputScreen');
+
+            function appendNumber(num) {
+                if (output.innerText === '0') {
+                    output.innerText = num;
+                } else {
+                    output.innerText += num;
+                }
+            }
+
+            function appendOperator(operator) {
+                const lastChar = output.innerText.slice(-1);
+                if (output.innerText !== '0' && !isOperator(lastChar)) {
+                    output.innerText += operator;
+                }
+            }
+
+            function appendDecimal(decimal) {
+                const lastChar = output.innerText.slice(-1);
+                const hasDecimal = output.innerText.includes(decimal);
+                if (!hasDecimal && !isOperator(lastChar)) {
+                    output.innerText += decimal;
+                } else if (isOperator(lastChar)) {
+                    output.innerText += '0' + decimal;
+                } else if (lastChar === '.') {
+                    output.innerText += '.';
+                }
+            }
+
+            function calculate() {
+                try {
+                    const expression = output.innerText;
+                    const lastChar = expression.slice(-1);
+                    if (!isOperator(lastChar)) {
+                        output.innerText = eval(expression);
+                    } else {
+                        output.innerText = 'Syntax Error';
+                    }
+                } catch (error) {
+                    output.innerText = 'Error';
+                }
+            }
+
+            function clearScreen() {
+                output.innerText = '0';
+            }
+
+            function deleteChar() {
+                output.innerText = output.innerText.slice(0, -1);
+            }
+
+            function isOperator(char) {
+                const operators = ['+', '-', '*', '/'];
+                return operators.includes(char);
+            }
+        </script>
+        
+    </body>
+</html>
